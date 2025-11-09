@@ -1,0 +1,866 @@
+/* Reseta margens e define uma fonte padrão para a página */
+body {
+    margin: 0;
+    overflow: hidden; /* Impede a barra de rolagem do corpo da página */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f4;
+    background-color: #000; /* Fundo preto para evitar flash branco na transição */
+}
+
+/* --- Estilização da Barra de Rolagem --- */
+
+/* Para navegadores WebKit (Chrome, Safari, Edge, etc.) */
+::-webkit-scrollbar {
+    width: 10px; /* Largura da barra de rolagem */
+}
+
+::-webkit-scrollbar-track {
+    background: #1a1a1a; /* Cor de fundo da trilha (a mesma da sidebar) */
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #555; /* Cor da parte móvel da barra */
+    border-radius: 20px; /* Bordas arredondadas */
+    border: 2px solid #1a1a1a; /* Cria um espaçamento ao redor da parte móvel */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #007BFF; /* Cor ao passar o mouse, usando seu azul principal */
+}
+
+
+
+/* travar a rolagem da página */
+/* Classe para travar a rolagem da página */
+.no-scroll {
+    overflow: hidden;
+}
+
+/* Estilos para a hero section */
+.hero {
+    display: flex; /* Usa flexbox para centralizar o conteúdo */
+    position: relative; /* Necessário para posicionar as bolinhas de fundo */
+    overflow: hidden; /* Esconde as bolinhas que saem da área */
+    flex-direction: column;
+    justify-content: center; /* Centraliza verticalmente */
+    align-items: center; /* Centraliza horizontalmente */
+    height: 100vh; /* Ocupa a altura total da tela */
+    text-align: center;
+    background-color: #000; /* Fundo preto */
+    color: #fff; /* Texto branco */
+    cursor: pointer; /* Mostra que a área é clicável */
+    transition: transform 1s ease-in-out; /* Adiciona transição para a animação de saída */
+}
+
+/* Remove o sublinhado do link e herda a cor do texto */
+.hero-link {
+    text-decoration: none;
+    color: inherit;
+    position: relative; /* Garante que o texto fique sobre a animação */
+    text-align: center; /* Garante que o texto dentro do link seja centralizado */
+    z-index: 2;
+}
+
+/* Classe para animar a saída da hero section */
+.hero-hidden {
+    transform: translateY(-100%); /* Move a seção para cima, para fora da tela */
+    pointer-events: none; /* Impede que a seção seja clicável após a animação */
+}
+
+/* Estilos para o título e subtítulo */
+.hero h1 {
+    font-size: 4.5rem; /* Aumenta o tamanho da fonte do título */
+    margin-top: 0;
+    margin-bottom: 0.5rem; /* Reduz a margem inferior para aproximar do subtítulo */
+}
+
+.hero p {
+    font-size: 1.75rem; /* Aumenta o tamanho da fonte do subtítulo */
+    margin: 0;
+    font-weight: 300; /* Deixa a fonte um pouco mais fina */
+}
+
+/* --- Estrutura Principal do Portfólio --- */
+
+.portfolio-body {
+    display: flex;
+}
+
+/* Esconde a sidebar quando a classe no-scroll está no body (na tela inicial) */
+.no-scroll .sidebar {
+    display: none;
+}
+
+
+.sidebar {
+    width: 200px;
+    background-color: #1a1a1a;
+    color: #fff;
+    height: 100vh; /* Ocupa a altura da tela */
+    position: fixed; /* Faz a barra lateral ficar fixa na viewport */
+    z-index: 100; /* Garante que a sidebar esteja sempre acima de outros elementos */
+    top: 0;
+    display: flex; /* Habilita o flexbox */
+    flex-direction: column; /* Organiza os itens em coluna */
+    padding-top: 2rem;
+}
+
+.light-mode .sidebar {
+    background-color: #f8f9fa; /* Fundo branco/cinza muito claro */
+    color: #1c1e21; /* Texto escuro */
+    border-right: 1px solid #dee2e6; /* Borda sutil para separar do conteúdo */
+}
+
+.light-mode .sidebar nav a,
+.light-mode .social-icons a {
+    color: #1c1e21; /* Cor escura para links e ícones */
+}
+
+
+/* --- Estilos do Seletor de Tema (Light/Dark Mode) --- */
+.theme-switcher-container {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 2rem;
+}
+
+#theme-toggle {
+    display: none; /* Esconde o checkbox real */
+}
+
+.theme-switcher {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 60px;
+    height: 30px;
+    background-color: #333;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    justify-content: space-between; /* Espaça os ícones */
+    padding: 0 5px; /* Adiciona um pequeno espaçamento nas bordas */
+}
+
+.light-mode .theme-switcher {
+    background-color: #ccc; /* Fundo cinza claro para o interruptor */
+}
+
+.theme-switcher .fa-sun {
+    color: #f39c12; /* Cor amarela para o sol */
+    opacity: 0; /* Começa invisível */
+    transition: opacity 0.3s ease;
+}
+
+.theme-switcher .fa-moon {
+    color: #f1c40f; /* Cor dourada para a lua */
+    opacity: 1; /* Começa visível */
+    transition: opacity 0.3s ease;
+}
+
+.theme-switcher::before {
+    content: '';
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #fff;
+    left: 3px;
+    transition: transform 0.3s ease;
+}
+
+#theme-toggle:checked + .theme-switcher::before {
+    transform: translateX(40px);
+}
+
+/* Quando o modo claro está ativo (checked) */
+#theme-toggle:checked + .theme-switcher .fa-sun {
+    opacity: 1; /* Mostra o sol */
+}
+
+#theme-toggle:checked + .theme-switcher .fa-moon {
+    opacity: 0; /* Esconde a lua */
+}
+
+.sidebar nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar nav a {
+    display: block;
+    padding: 1rem 1.5rem;
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar nav a.active {
+    background-color: #007BFF;
+    color: #fff;
+}
+
+.sidebar nav a:hover {
+    background-color: #333;
+}
+
+.light-mode .sidebar nav a:hover {
+    background-color: #e9ecef; /* Fundo cinza claro para o hover */
+}
+
+.light-mode .sidebar nav a.active {
+    background-color: #007BFF;
+    color: #fff;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 1.5rem 0;
+    margin-top: auto; /* Empurra os ícones para a parte inferior */
+    margin-bottom: 2rem; /* Adiciona um espaço na parte inferior para subir os ícones */
+}
+
+.social-icons a {
+    color: #fff;
+    font-size: 1.5rem; /* Aumenta o tamanho dos ícones */
+    text-decoration: none;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.social-icons a:hover {
+    color: #007BFF; /* Muda a cor ao passar o mouse */
+    transform: scale(1.2); /* Aumenta levemente o tamanho */
+}
+
+.main-content {
+    flex: 1; /* Ocupa o espaço restante */
+    margin-left: 200px; /* Adiciona margem para compensar a sidebar fixa */
+    height: 100vh; /* Ocupa a altura total da viewport */
+    overflow-y: hidden; /* Desabilita a rolagem principal, forçando a navegação pela sidebar */
+    scroll-behavior: smooth; /* Garante rolagem suave ao usar scrollIntoView */
+}
+
+.content-section {
+    height: 100vh; /* Cada seção ocupa exatamente a altura da tela */
+    padding: 4rem;
+    overflow-y: auto; /* Permite a rolagem vertical DENTRO da seção, se necessário */
+    scroll-snap-align: start; /* Faz a seção "grudar" no topo ao rolar */
+}
+
+/* Estilos para a seção Home/Sobre Mim */
+#home {
+    max-height: 100vh; /* Garante que a seção não ultrapasse a altura da tela */
+    background-color: #000;
+    color: #fff;
+    position: relative; /* Necessário para posicionar a animação de fundo */
+    overflow: hidden; /* Esconde as linhas que saem da seção */
+}
+
+/* --- ESTILOS DO MODO CLARO --- */
+.light-mode #home {
+    background-color: #f0f2f5;
+    color: #1c1e21;
+}
+
+/* Muda a cor da animação de linhas para o modo claro */
+.light-mode .line {
+    background: rgba(0, 0, 0, 0.1); /* Linha cinza claro semi-transparente */
+}
+
+.light-mode .line::after {
+    /* Muda o gradiente da "gota" para um tom escuro */
+    background: linear-gradient(to top, rgba(0, 0, 0, 0) 0%, #333333 75%, #333333 100%);
+}
+/* Garante que o conteúdo da seção Formação fique acima das partículas */
+#formacao h2,
+#formacao .formation-item {
+    position: relative;
+    z-index: 1;
+}
+
+/* Garante que o conteúdo da seção Formação fique acima das partículas */
+#formacao h2, #formacao .formation-item { position: relative; z-index: 1; }
+
+.home-content {
+    position: relative;
+    z-index: 2; /* Garante que o conteúdo fique na frente da animação */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.about-container {
+    display: flex;
+    align-items: flex-start; /* Alinha os itens no topo */
+    gap: 3rem; /* Espaço entre a caixa "Sobre Mim" e a timeline */
+    gap: 3rem; /* Este espaço será a área da nossa linha central */
+    width: 100%;
+    max-width: 1400px; /* Aumenta a largura máxima para caber tudo */
+    position: relative; /* Necessário para posicionar a nova linha central */
+}
+
+.about-container::before {
+    content: '';
+    position: absolute;
+    left: 50%; /* Posição no centro horizontal do container */
+    transform: translateX(-50%); /* Ajuste fino para centralizar a linha */
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background-color: #007BFF;
+}
+
+.about-column {
+    display: flex;
+    flex-direction: column;
+    flex: 1; /* Faz a coluna ocupar metade do espaço disponível */
+    gap: 2rem; /* Espaço entre o about-box e o glass-card */
+    position: relative; /* Garante que a coluna fique acima da linha ::before */
+    align-items: center; /* Centraliza os blocos de texto na coluna */
+    padding-right: 1.5rem; /* Adiciona um espaço para não encostar na linha central */
+}
+
+.lines-animation {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    z-index: 1;
+}
+
+.line {
+    position: absolute;
+    width: 1px;
+    height: 100%;
+    top: 0;
+    left: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+}
+
+.line::after {
+    content: '';
+    display: block;
+    position: absolute;
+    height: 15vh;
+    width: 100%;
+    top: -50%;
+    left: 0;
+    background: linear-gradient(to top, rgba(255, 255, 255, 0) 0%, #ffffff 75%, #ffffff 100%);
+    animation: drop 7s 0s infinite;
+    animation-fill-mode: forwards;
+    animation-timing-function: cubic-bezier(0.4, 0.26, 0, 0.97);
+}
+
+.photo-frame {
+    width: 200px;
+    height: 200px;
+    border: 5px solid #fff; /* A "moldura" branca */
+    border-radius: 50%; /* Deixa a moldura redonda */
+    margin-bottom: 2rem;
+    background-color: #333; /* Cor de fundo enquanto não há foto */
+}
+
+.light-mode .photo-frame {
+    width: 200px;
+    height: 200px;
+    border: 5px solid #007BFF; /* Moldura azul */
+    border-radius: 50%;
+    margin-bottom: 2rem;
+    background-color: #333;
+}
+
+.photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Garante que a imagem cubra todo o espaço sem distorcer */
+    border-radius: 50%; /* Deixa a imagem redonda, acompanhando a moldura */
+}
+
+#home h2 {
+    font-size: 3rem; /* Movido para dentro de .about-box h2 */
+    text-align: center;
+}
+
+.about-text {
+    font-size: 1.2rem; /* Aumenta o tamanho da fonte */
+    text-align: center; /* Alinha o texto à esquerda dentro do bloco */
+    text-align: center; /* Alinha o texto à direita */
+    line-height: 1.6; /* Aumenta o espaçamento entre as linhas */
+    font-weight: 300; /* Deixa a fonte um pouco mais leve */
+    margin-top: 0; /* Remove margem superior para colar no h2 */
+}
+
+.about-box {
+    max-width: 75ch; /* Limita a largura do bloco para melhor legibilidade */
+    background-color: #2a2a2a; /* Fundo cinza escuro para o bloco */
+    padding: 2rem; /* Espaçamento interno para o texto não colar na borda */
+    border-radius: 15px; /* Bordas arredondadas */
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
+    flex: 1; /* Permite que a caixa cresça */
+    min-width: 400px; /* Largura mínima */
+}
+
+.light-mode .about-box,
+.light-mode .timeline-content {
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+/* --- Estilos do Glass Card --- */
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.1); /* Fundo semi-transparente */
+    backdrop-filter: blur(10px); /* O efeito de desfoque que cria o "vidro" */
+    -webkit-backdrop-filter: blur(10px); /* Para compatibilidade com Safari */
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Borda sutil */
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    padding: 2rem;
+    color: #fff;
+    min-width: 400px; /* Garante que tenha a mesma largura mínima do about-box */
+    max-width: 800px;  /* Garante que tenha a mesma largura máxima do about-box */
+}
+
+.light-mode .glass-card {
+    background: rgba(255, 255, 255, 0.7);
+    color: #333;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.glass-card h3 {
+    margin-top: 0;
+    text-align: left; /* Alinha o título à esquerda dentro do bloco */
+    text-align: right; /* Alinha o título à direita */
+    font-size: 1.8rem;
+}
+
+.glass-card ul {
+    list-style: none;
+    padding: 0;
+    font-weight: 300;
+    line-height: 1.8;    
+    text-align: left; /* Alinha a lista à esquerda, sobrepondo a regra do container */
+}
+
+/* --- Estilos da Linha do Tempo --- */
+
+.timeline {
+    flex: 1; /* Permite que a timeline cresça */
+    min-width: 400px; /* Largura mínima */
+    position: relative; /* Torna-se o container de referência para a linha */
+    padding-left: 1.5rem; /* Adiciona espaço para afastar o conteúdo da linha central */
+    position: relative; /* Necessário para posicionar os pontos da timeline */
+}
+
+.timeline h3 {
+    font-size: 2rem;
+    margin-top: 0;
+    margin-bottom: 2rem;
+    text-align: left; /* Alinha o título à esquerda */
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 2rem;
+    opacity: 0;
+    transform: translateX(-30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+/* O ponto na linha do tempo */
+.timeline-item::before {
+    content: '';
+    position: absolute;    
+    left: 0; /* Posiciona o ponto na borda da área de padding */
+    transform: translateX(-50%); /* Centraliza o ponto na linha */
+    left: calc(-1.5rem - 1.5px); /* Move o ponto para a esquerda (metade do gap + metade da linha) */
+    transform: translateX(-50%); /* Centraliza o ponto sobre a linha */
+    width: 15px;
+    height: 15px;
+    background-color: #fff;
+    border: 3px solid #007BFF;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+/* Classe a ser adicionada via JS para ativar a animação */
+.timeline-item.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.timeline-content {
+    background-color: #2a2a2a;
+    padding: 1.5rem;
+    border-radius: 8px;
+    max-width: 500px; /* Limita a largura da caixa de texto */
+}
+
+.timeline-date {
+    margin: 0 0 0.5rem 0;
+    color: #007BFF;
+    font-weight: bold;
+}
+/* Estilos para seções de fundo claro */
+.section-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centraliza verticalmente */
+    align-items: center;
+    width: 100%; /* Garante que o wrapper ocupe a largura */
+    height: 100%; /* Garante que o wrapper ocupe a altura */
+    /* Estado inicial para a animação */
+    opacity: 0;
+    transform: translateY(50px); /* Animação padrão: entra de baixo para cima */
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out; /* Adiciona a transição de volta */
+    position: relative; /* Necessário para o z-index funcionar */
+    z-index: 2; /* Garante que o conteúdo fique acima das animações de fundo (z-index: 1) */
+}
+
+/* Classe para quando a seção deve entrar de cima para baixo */
+.section-fade-in-up {
+    transform: translateY(-50px);
+}
+
+.section-content-wrapper.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Classe para animar a saída de uma seção (para CIMA) */
+.section-fade-out {
+    opacity: 0;
+    transform: translateY(-50px);
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+}
+
+/* Classe para animar a saída de uma seção (para BAIXO) */
+.section-fade-out-down {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+}
+
+.light-section {
+    background-color: #000000;
+    color: #fff;
+    position: relative; /* Necessário para posicionar as partículas */
+    display: flex; /* Usa flex para centralizar o wrapper */
+    justify-content: center;
+    align-items: center;
+}
+
+.light-mode .light-section {
+    background-color: #f0f2f5;
+    color: #1c1e21;
+}
+
+.light-section h2 {
+    font-size: 3rem;
+    margin-bottom: 3rem;
+}
+
+.formation-item {
+    background-color: #474545;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    max-width: 800px;
+    width: 100%;
+}
+
+.light-mode .formation-item,
+.light-mode .project-card {
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.formation-item h3 {
+    margin-top: 0;
+    font-size: 1.8rem;
+}
+
+/* --- Estilos da Seção de Projetos --- */
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Layout responsivo */
+    gap: 2rem;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.project-card {
+    background-color: #474545;
+    border-radius: 8px;
+    overflow: hidden; /* Garante que a imagem não saia do card */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out, box-shadow 0.3s ease;
+
+    /* Estado inicial para a animação de entrada */
+    opacity: 0;
+    transform: translateY(50px);
+}
+
+.project-card:hover {
+    transform: translateY(-10px); /* Efeito de levantar ao passar o mouse */
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+/* Classe a ser adicionada via JS para ativar a animação */
+.project-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.project-card img {
+    width: 100%;
+    height: 200px; /* Altura fixa para a imagem */
+    object-fit: cover; /* Garante que a imagem cubra o espaço sem distorcer */
+}
+
+.project-info {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Faz este container crescer para ocupar o espaço */
+}
+
+.project-info h3 {
+    margin-top: 0;
+    font-size: 1.5rem;
+}
+
+.project-info p {
+    flex-grow: 1; /* Empurra os links para o final do card */
+    margin-bottom: 1.5rem;
+}
+
+.project-links a {
+    color: #fff;
+    background-color: #007BFF;
+    padding: 0.6rem 1.2rem;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-right: 0.5rem;
+    transition: background-color 0.3s ease;
+}
+
+.project-links a:hover {
+    background-color: #0056b3;
+}
+
+/* --- Estilos da Seção de Contato --- */
+
+#contato .contact-intro {
+    margin-bottom: 2rem;
+    font-size: 1.2rem;
+    font-weight: 300;
+    max-width: 600px;
+    text-align: center;
+}
+
+.contact-form {
+    width: 100%;
+    max-width: 700px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #cccccc;
+}
+
+.form-group input,
+.form-group textarea {
+    background-color: #2a2a2a;
+    border: 1px solid #555;
+    border-radius: 5px;
+    padding: 0.8rem 1rem;
+    color: #fff;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #007BFF;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+.submit-btn {
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    padding: 1rem;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+    background-color: #0056b3;
+}
+
+.light-mode .form-group input,
+.light-mode .form-group textarea {
+    background-color: #e4e6eb;
+    color: #1c1e21;
+}
+/* --- Estilos das Partículas Brilhantes --- */
+
+.glowing-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0; /* Garante que as partículas fiquem no fundo */
+}
+
+.glowing-particles span {
+    position: absolute; /* Posição absoluta dentro do container .glowing-particles */
+    bottom: 0; /* Começam na parte de baixo do container */
+    background-color: #fff;
+    border-radius: 50%;
+    animation: float-particles 20s linear infinite;
+    
+    /* Efeito de brilho */
+    box-shadow: 0 0 5px #fff,
+                0 0 10px #fff,
+                0 0 15px #fff;
+}
+
+/* Variações de tamanho, posição e animação para cada partícula */
+.glowing-particles span:nth-child(1) {
+    width: 5px; height: 5px; left: 15%; animation-duration: 25s; animation-delay: 0s;
+}
+.glowing-particles span:nth-child(2) {
+    width: 2px; height: 2px; left: 30%; animation-duration: 15s; animation-delay: 3s;
+}
+.glowing-particles span:nth-child(3) {
+    width: 4px; height: 4px; left: 50%; animation-duration: 22s; animation-delay: 1s;
+}
+.glowing-particles span:nth-child(4) {
+    width: 3px; height: 3px; left: 75%; animation-duration: 18s; animation-delay: 5s;
+}
+.glowing-particles span:nth-child(5) {
+    width: 2px; height: 2px; left: 90%; animation-duration: 28s; animation-delay: 2s;
+}
+.glowing-particles span:nth-child(6) {
+    width: 4px; height: 4px; left: 5%; animation-duration: 16s; animation-delay: 8s;
+}
+.glowing-particles span:nth-child(7) {
+    width: 3px; height: 3px; left: 60%; animation-duration: 20s; animation-delay: 4s;
+}
+
+@keyframes float-particles {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100%) scale(0.5); /* Sobem até o topo do container e diminuem */
+        opacity: 0;
+    }
+}
+
+@keyframes drop {
+    0% { top: -50%; }
+    100% { top: 110%; }
+}
+
+/* Estilos para a animação de fundo */
+.background-balls {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.background-balls li {
+    position: absolute;
+    display: block;
+    list-style: none;
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.2); /* Bolinhas brancas semi-transparentes */
+    animation: animate-balls 25s linear infinite;
+    bottom: -150px; /* Posição inicial fora da tela */
+    border-radius: 50%;
+}
+
+/* Variações de tamanho, posição e duração para cada bolinha */
+.background-balls li:nth-child(1) { left: 25%; width: 80px; height: 80px; animation-delay: 0s; }
+.background-balls li:nth-child(2) { left: 10%; width: 20px; height: 20px; animation-delay: 2s; animation-duration: 12s; }
+.background-balls li:nth-child(3) { left: 70%; width: 20px; height: 20px; animation-delay: 4s; }
+.background-balls li:nth-child(4) { left: 40%; width: 60px; height: 60px; animation-delay: 0s; animation-duration: 18s; }
+.background-balls li:nth-child(5) { left: 65%; width: 20px; height: 20px; animation-delay: 0s; }
+.background-balls li:nth-child(6) { left: 75%; width: 110px; height: 110px; animation-delay: 3s; }
+.background-balls li:nth-child(7) { left: 35%; width: 150px; height: 150px; animation-delay: 7s; }
+.background-balls li:nth-child(8) { left: 50%; width: 25px; height: 25px; animation-delay: 15s; animation-duration: 45s; }
+.background-balls li:nth-child(9) { left: 20%; width: 15px; height: 15px; animation-delay: 2s; animation-duration: 35s; }
+.background-balls li:nth-child(10) { left: 85%; width: 150px; height: 150px; animation-delay: 0s; animation-duration: 11s; }
+
+/* Definição da animação */
+@keyframes animate-balls {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-1000px) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+/* --- Media Query para Responsividade --- */
+@media (max-width: 1024px) {
+    .about-container {
+        flex-direction: column; /* Empilha as colunas verticalmente */
+        align-items: center; /* Centraliza os itens empilhados */
+    }
+
+    .about-box, .timeline {
+        width: 100%;
+        max-width: 600px; /* Limita a largura em telas menores */
+    }
+
+    /* Em telas menores, a linha central desaparece e a timeline volta a ser de lado único */
+    .about-container::before { display: none; }
+    .timeline { padding-left: 2rem; }
+    .timeline h3 { text-align: center; }
+    .timeline-item::before { left: -2rem; }
+
+}
+    .about-box, .timeline {
+        width: 100%;
+        max-width: 600px; /* Limita a largura em telas menores */
+    }
+
+    /* Em telas menores, a timeline volta a ser de lado único */
+    .timeline::before { left: 0; transform: none; }
+    .timeline-item { width: 100%; }
