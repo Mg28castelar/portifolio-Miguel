@@ -226,7 +226,7 @@ body {
 
 .social-icons a {
     color: #fff;
-    font-size: 1.5rem; /* Aumenta o tamanho dos ícones */
+    font-size: 1.5rem; 
     text-decoration: none;
     transition: color 0.3s ease, transform 0.3s ease;
 }
@@ -247,17 +247,15 @@ body {
 .content-section {
     height: 100vh; /* Cada seção ocupa exatamente a altura da tela */
     padding: 4rem;
-    overflow-y: auto; /* Permite a rolagem vertical DENTRO da seção, se necessário */
-    scroll-snap-align: start; /* Faz a seção "grudar" no topo ao rolar */
+    overflow-y: auto; /* Habilita a rolagem DENTRO da seção, apenas se necessário */
+    box-sizing: border-box; /* Garante que o padding seja incluído na altura total (100vh) */
 }
 
 /* Estilos para a seção Home/Sobre Mim */
 #home {
-    max-height: 100vh; /* Garante que a seção não ultrapasse a altura da tela */
     background-color: #000;
     color: #fff;
     position: relative; /* Necessário para posicionar a animação de fundo */
-    overflow: hidden; /* Esconde as linhas que saem da seção */
 }
 
 /* --- ESTILOS DO MODO CLARO --- */
@@ -290,13 +288,16 @@ body {
     z-index: 2; /* Garante que o conteúdo fique na frente da animação */
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: center; /* Centraliza a foto e o container de conteúdo */
+    align-items: center; /* Centraliza a foto e o container de conteúdo */
 }
 
 .about-container {
     display: flex;
-    align-items: flex-start; /* Alinha os itens no topo */
+    align-items: flex-start; /* Alinha os itens no topo */elin */
+    ag-slf: stretch; /* Faz este container ocupar toda a largura e se alinhar ao topo
     gap: 3rem; /* Espaço entre a caixa "Sobre Mim" e a timeline */
+    align-self: stretch; /* Faz este container ocupar toda a largura e se alinhar ao topo */
     gap: 3rem; /* Este espaço será a área da nossa linha central */
     width: 100%;
     max-width: 1400px; /* Aumenta a largura máxima para caber tudo */
@@ -473,6 +474,11 @@ body {
     transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
+/* Remove a margem do último item para evitar espaço extra na rolagem */
+.timeline-item:last-child {
+    margin-bottom: 0;
+}
+
 /* O ponto na linha do tempo */
 .timeline-item::before {
     content: '';
@@ -511,14 +517,7 @@ body {
 .section-content-wrapper {
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Centraliza verticalmente */
-    align-items: center;
     width: 100%; /* Garante que o wrapper ocupe a largura */
-    height: 100%; /* Garante que o wrapper ocupe a altura */
-    /* Estado inicial para a animação */
-    opacity: 0;
-    transform: translateY(50px); /* Animação padrão: entra de baixo para cima */
-    transition: opacity 0.8s ease-out, transform 0.8s ease-out; /* Adiciona a transição de volta */
     position: relative; /* Necessário para o z-index funcionar */
     z-index: 2; /* Garante que o conteúdo fique acima das animações de fundo (z-index: 1) */
 }
@@ -529,31 +528,12 @@ body {
 }
 
 .section-content-wrapper.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* Classe para animar a saída de uma seção (para CIMA) */
-.section-fade-out {
-    opacity: 0;
-    transform: translateY(-50px);
-    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
-}
-
-/* Classe para animar a saída de uma seção (para BAIXO) */
-.section-fade-out-down {
-    opacity: 0;
-    transform: translateY(50px);
-    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
 }
 
 .light-section {
     background-color: #000000;
     color: #fff;
     position: relative; /* Necessário para posicionar as partículas */
-    display: flex; /* Usa flex para centralizar o wrapper */
-    justify-content: center;
-    align-items: center;
 }
 
 .light-mode .light-section {
@@ -602,22 +582,23 @@ body {
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     display: flex;
     flex-direction: column;
-    transition: opacity 0.6s ease-out, transform 0.6s ease-out, box-shadow 0.3s ease;
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out, box-shadow 0.3s ease;
 
     /* Estado inicial para a animação de entrada */
     opacity: 0;
-    transform: translateY(50px);
+    transform: scale(0.95); /* Começa um pouco menor */
 }
 
 .project-card:hover {
-    transform: translateY(-10px); /* Efeito de levantar ao passar o mouse */
+    /* Mantém a escala e levanta um pouco */
+    transform: scale(1) translateY(-5px);
     box-shadow: 0 8px 25px rgba(0,0,0,0.3);
 }
 
 /* Classe a ser adicionada via JS para ativar a animação */
 .project-card.visible {
     opacity: 1;
-    transform: translateY(0);
+    transform: scale(1); /* Volta ao tamanho normal */
 }
 
 .project-card img {
@@ -787,8 +768,12 @@ body {
 }
 
 @keyframes drop {
-    0% { top: -50%; }
-    100% { top: 110%; }
+    0% {
+        transform: translateY(-100vh); /* Começa bem acima da tela */
+    }
+    100% {
+        transform: translateY(100vh); /* Termina bem abaixo da tela */
+    }
 }
 
 /* Estilos para a animação de fundo */

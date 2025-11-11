@@ -13,7 +13,8 @@ document.addEventListener('DOMContentLoaded', function() {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
-                    observer.unobserve(entry.target); // Anima apenas uma vez
+                    // Para de observar o elemento depois que ele se tornou visível para evitar re-animações e bugs.
+                    observer.unobserve(entry.target);
                 }
             });
         }, options);
@@ -22,27 +23,29 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     // 1. Animação das Linhas
-    const linesContainer = document.querySelector('.lines-animation');
-    if (linesContainer) {
-        const numberOfLines = 25;
-        for (let i = 0; i < numberOfLines; i++) {
-            const line = document.createElement('div');
-            line.className = 'line';
-            const randomLeft = Math.random() * 100;
-            const randomDelay = Math.random() * 5;
-            const randomDuration = 3 + Math.random() * 4;
-            line.style.left = `${randomLeft}%`;
-            line.style.animation = `drop ${randomDuration}s ${randomDelay}s linear infinite`;
-            linesContainer.appendChild(line);
-        }
+    const linesContainers = document.querySelectorAll('.lines-animation');
+    if (linesContainers.length > 0) {
+        linesContainers.forEach(container => {
+            const numberOfLines = 25;
+            for (let i = 0; i < numberOfLines; i++) {
+                const line = document.createElement('div');
+                line.className = 'line';
+                const randomLeft = Math.random() * 100;
+                const randomDelay = Math.random() * 5;
+                const randomDuration = 3 + Math.random() * 4;
+                line.style.left = `${randomLeft}%`;
+                line.style.animation = `drop ${randomDuration}s ${randomDelay}s linear infinite`;
+                container.appendChild(line);
+            }
+        });
     }
 
     // 2. Animações de Entrada (Timeline, Projetos, Seções)
     const timelineItems = document.querySelectorAll('.timeline-item');
     const projectCards = document.querySelectorAll('.project-card');
 
-    createObserver(timelineItems, { root: mainContent, threshold: 0.2 }); // Anima itens da timeline
-    createObserver(projectCards, { root: mainContent, threshold: 0.1 }); // Anima cards de projeto
+    createObserver(timelineItems, { threshold: 0.1 }); // Anima itens da timeline
+    createObserver(projectCards, { threshold: 0.1 }); // Anima cards de projeto
 
     const navLinks = document.querySelectorAll('.sidebar .nav-link');
 
@@ -62,12 +65,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         link.classList.add('active');
                     }
                 });
-
-                const wrapper = entry.target.querySelector('.section-content-wrapper');
-                if (wrapper) {
-                    wrapper.classList.remove('section-fade-out', 'section-fade-out-down');
-                    wrapper.classList.add('visible'); // <-- Adiciona esta linha para tornar o conteúdo visível
-                }
             }
         });
     }, { root: mainContent, threshold: 0.5 });
@@ -121,22 +118,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
             isTransitioning = true;
             const direction = targetIndex > currentIndex ? 'down' : 'up';
-
-            // Prepara animações
-            const targetWrapper = targetSection.querySelector('.section-content-wrapper');
-            if (targetWrapper) {
-                targetWrapper.classList.remove('section-fade-in-up', 'section-fade-out', 'section-fade-out-down');
-                if (direction === 'up') targetWrapper.classList.add('section-fade-in-up');
-            }
-
-            // Anima saída da seção atual
-            if (currentSection) {
-                const currentWrapper = currentSection.querySelector('.section-content-wrapper');
-                if (currentWrapper) {
-                    if (direction === 'down') currentWrapper.classList.add('section-fade-out');
-                    else currentWrapper.classList.add('section-fade-out-down');
-                }
-            }
 
             // Rola suavemente para a seção alvo
             targetSection.scrollIntoView({ behavior: 'auto' });
